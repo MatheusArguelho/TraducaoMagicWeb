@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ original_text }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='carta_individual.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="image-text-container">
+            <div class="image-container">
+                <img src="{{ normal_image_url }}" alt="Imagem da carta {{ original_text }}">
+                <img src="{{ normal_image_url2 }}" alt="">
+            </div>
+
+            <div class="text-container">
+                <h2>Texto em inglês:</h2>
+                <p>{{ oracle_texto }}</p>
+                <p style="font-style: italic;">{{ flavor_original }}</p>
+
+                <h2>Tradução:</h2>
+                <p>{{ translated }}</p>
+                <p style="font-style: italic;">{{ flavor_translated }}</p>
+            </div>
+        </div>
+
+        <!-- Adicionando o botão de voltar -->
+        <div class="back-button-container">
+            <a href="{{ url_for('home') }}" class="back-button">Voltar</a>
+        </div>
+    </div>
+</body>
+</html>

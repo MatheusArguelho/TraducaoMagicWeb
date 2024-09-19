@@ -1,0 +1,60 @@
+body {
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Empilha os elementos verticalmente */
+    align-items: flex-start; /* Alinha os itens à esquerda */
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+    color: #333;
+    transition: box-shadow 0.3s;
+}
+
+.container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image-text-container {
+    display: flex;
+    flex-direction: row; /* Alinha as imagens e texto horizontalmente */
+    align-items: center; /* Alinha o texto verticalmente ao centro em relação à imagem */
+    width: 100%; /* Ocupa toda a largura da .container */
+    position: relative; /* Necessário para posicionar o botão "Voltar" */
+}
+
+.image-container {
+    margin-right: 20px; /* Espaço entre a imagem e o texto */
+    position: relative; /* Necessário para centralizar o botão "Voltar" */
+}
+
+.image-container img {
+    display: block; /* Remove o espaçamento indesejado abaixo das imagens */
+}
+
+.back-button-container {
+    position: absolute; /* Posiciona o botão "Voltar" em relação à .image-container */
+    top: 50%; /* Posiciona o botão no meio da altura da imagem */
+    left: 50%; /* Posiciona o botão no meio da largura da imagem */
+    transform: translate(-50%, -50%); /* Ajusta a posição para o centro exato */
+    margin-top: 20px; /* Espaço acima do botão para separar das imagens e texto */
+    text-align: center; /* Centraliza o botão horizontalmente */
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
