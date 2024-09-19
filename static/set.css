@@ -1,0 +1,18 @@
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove espaços entre as bordas das células */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Borda fina e clara ao redor de cada célula */
+    padding: 8px; /* Espaço interno nas células */
+    text-align: left; /* Alinhamento do texto à esquerda */
+}
+
+th {
+    background-color: #f4f4f4; /* Cor de fundo das células de cabeçalho */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Cor de fundo alternada para as linhas */
+}

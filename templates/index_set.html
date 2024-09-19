@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traduzir Set</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Traduzir Set</h1>
+        <form method="post">
+            <label for="set_code">Código do Set:</label>
+            <input type="text" id="set_code" name="set_code" required>
+            <button type="submit" class="btn">Traduzir</button>
+        </form>
+    </div>
+</body>
+</html>
