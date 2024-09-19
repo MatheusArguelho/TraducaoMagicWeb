@@ -9,18 +9,18 @@ app = Flask(__name__)
 def home():
     if request.method == 'POST':
         if 'translate_card' in request.form:
-            return redirect(url_for('carta_individual'))
+            return redirect(url_for('traducao_carta'))
         elif 'translate_set' in request.form:
             return redirect(url_for('traducao_set'))
     return render_template('index.html')
 
-@app.route('/carta_individual', methods=['GET', 'POST'])
-def carta_individual():
+@app.route('/traducao_carta', methods=['GET', 'POST'])
+def traducao_carta():
     if request.method == 'POST':
         original_text = request.form['card_name']
         result = process_card(original_text)
         if result:
-            return render_template('carta_individual.html', **result)
+            return render_template('resultado_carta.html', **result)
         else:
             return "Erro ao processar a carta."
     return render_template('index_carta_individual.html')
@@ -32,10 +32,6 @@ def traducao_set():
         html_content = func_traducao(set_code)
         return render_template('resultado_set.html', html_content=html_content)
     return render_template('index_set.html')
-
-@app.route('/resultado_set/<set_code>')
-def resultado_set(set_code):
-    return redirect(url_for('traducao_set'))
 
 if __name__ == '__main__':
     app.run(debug=True)

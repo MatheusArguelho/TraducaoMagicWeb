@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tradução de Carta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    <h1>Tradução de Carta</h1>
-    <form method="post" action="/carta_individual">
-        <label for="card_name">Nome da Carta:</label>
-        <input type="text" id="card_name" name="card_name" required>
-        <button type="submit">Traduzir</button>
-    </form>
+    <div class = "container">
+        <h1>Tradução de Carta</h1>
+        <form method="post" action="/traducao_carta">
+            <label for="card_name">Nome da Carta:</label>
+            <input type="text" id="card_name" name="card_name" required>
+            <button type="submit">Traduzir</button>
+        </form>
+    </div>
 </body>
 </html>
