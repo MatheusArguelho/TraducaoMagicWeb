@@ -15,12 +15,12 @@
 
             <div class="text-container">
                 <h2>Texto em inglês:</h2>
-                <p>{{ oracle_texto }}</p>
-                <p style="font-style: italic;">{{ flavor_original }}</p>
+                <p>{{ oracle_texto | safe }}</p>  <!-- Aplica 'safe' para que as quebras de linha sejam interpretadas -->
+                <p style="font-style: italic;">{{ flavor_original | safe }}</p>
 
                 <h2>Tradução:</h2>
-                <p>{{ translated }}</p>
-                <p style="font-style: italic;">{{ flavor_translated }}</p>
+                <p>{{ translated | safe }}</p>  <!-- Aplica 'safe' na tradução -->
+                <p style="font-style: italic;">{{ flavor_translated | safe }}</p>
             </div>
         </div>
 
