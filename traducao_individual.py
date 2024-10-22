@@ -40,14 +40,15 @@ def descapitalize_and_replace(text):
     return text.lower().replace(" ", "+").replace("'", "")
 
 
-def translate_text(card_name, text):
-    if card_name in translation_cache:
-        return translation_cache[card_name]['translated_text']
+def translate_text(card_name, text, text_type):
+    cache_key = f"{card_name}_{text_type}"  # Crie uma chave única para cada tipo de texto
+    if cache_key in translation_cache:
+        return translation_cache[cache_key]['translated_text']
 
     translated = GoogleTranslator(source='auto', target='pt').translate(text=text)
 
-    # Salvando o nome da carta e a tradução no cache
-    translation_cache[card_name] = {
+    # Salvando o texto original e a tradução no cache
+    translation_cache[cache_key] = {
         'original_text': text,
         'translated_text': translated
     }
@@ -56,13 +57,15 @@ def translate_text(card_name, text):
     return translated
 
 
+
 def format_text_for_html(text):
     return text.replace("\n", "<br>")
 
 
-def translate_and_format_text(card_name, text):
-    translated_text = translate_text(card_name, text)  # Passando o nome da carta
+def translate_and_format_text(card_name, text, text_type):
+    translated_text = translate_text(card_name, text, text_type)  # Passando o tipo de texto
     return format_text_for_html(translated_text)
+
 
 
 
@@ -130,9 +133,9 @@ def process_card(original_text):
     oracle_texto = extract_oracle_text(data)
     flavor_original = extract_flavor_text(data)
 
-    # Passar o nome da carta ao traduzir
-    translated_oracle = translate_and_format_text(original_text, oracle_texto)
-    translated_flavor = translate_and_format_text(original_text, flavor_original)
+    # Passando um tipo de texto para diferenciar no cache
+    translated_oracle = translate_and_format_text(original_text, oracle_texto, 'oracle')
+    translated_flavor = translate_and_format_text(original_text, flavor_original, 'flavor')
 
     return {
         'original_text': original_text,
@@ -143,4 +146,6 @@ def process_card(original_text):
         'translated': translated_oracle,
         'flavor_translated': translated_flavor
     }
+
+
 
