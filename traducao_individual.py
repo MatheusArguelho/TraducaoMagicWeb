@@ -47,13 +47,16 @@ def translate_text(card_name, text, text_type):
     # Verifica primeiro o cache em memória
     cache_key = f"{card_name}_{text_type}"  # Cria chave única para o cache
     if cache_key in translation_cache:
+        print ("carta encontrada no cache")
         return translation_cache[cache_key]['translated_text']  # Retorna a tradução do cache em memória
 
     # Em seguida, verifica o cache em JSON
     if cache_key in json_cache:
+        print("carta encontrada no JSON")
         return json_cache[cache_key]['translated_text']  # Retorna a tradução do cache em JSON
 
     # Se não encontrado, traduz do zero
+    print("carta não encontrada")
     translated = GoogleTranslator(source='auto', target='pt').translate(text=text)
 
     # Armazena a tradução no cache em memória
