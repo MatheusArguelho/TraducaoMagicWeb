@@ -46,19 +46,30 @@ def download_json(url):
     else:
         raise Exception(f"Falha, codigo: {response.status_code}")
 
+
 def process_card_data(card):
-    try:
-        oracle_texto = card["oracle_text"]
-    except KeyError:
+    # Tenta obter oracle_text diretamente
+    oracle_texto = card.get("oracle_text", None)
+
+    # Se oracle_texto for None, tenta obter de card_faces
+    if oracle_texto is None:
         try:
-            oracle_texto = card['card_faces'][0]['oracle_text'] + '\n' + '----' + '\n' + card['card_faces'][1]['oracle_text']
+            face1_text = card['card_faces'][0].get('oracle_text', '')
+            face2_text = card['card_faces'][1].get('oracle_text', '')
+            oracle_texto = face1_text + '\n' + '----' + '\n' + face2_text if face1_text or face2_text else ''
         except KeyError:
             oracle_texto = ''
+
+    # Garante que oracle_texto nunca será None
+    oracle_texto = oracle_texto or ''  # Se for None, substitui por string vazia
+
+    # Retorna os dados da carta
     return {
         "num": card.get("collector_number", ""),
         "name": card["name"],
         "oracle_text": oracle_texto
     }
+
 
 def filter_card_data(df):
     df = df[~df['num'].str.contains('z')]
@@ -68,6 +79,10 @@ def filter_card_data(df):
 # Função para verificar e traduzir textos de cartas com cache
 def translate_and_format_text(card_name, text):
     cache_key = f"{card_name}_oracle"
+
+    # Verifica se o texto está vazio ou None
+    if text is None or text.strip() == "":
+        return "Texto não disponível para tradução"
 
     # Verifica se a tradução está no cache em memória
     if cache_key in translation_cache:
@@ -96,14 +111,20 @@ def translate_and_format_text(card_name, text):
 
     return formatted_text
 
+
 def translate_card_texts(df):
     translated_texts = []
     for _, row in tqdm(df.iterrows(), total=len(df), desc="Translating cards"):
         card_name = row['name']
         oracle_text = row['oracle_text']
+
+        # Adicionando impressão de depuração
+        print(f"Translating card: {card_name}, oracle_text: {oracle_text}")  # Verifique o que está sendo passado
+
         translated_text = translate_and_format_text(card_name, oracle_text)
         translated_texts.append(translated_text)
     return translated_texts
+
 
 def save_csv_file(df, file_path):
     df.to_csv(file_path, index=False, encoding='utf-8')
