@@ -14,9 +14,20 @@ def load_translation_cache():
     return {}  # Retorna um dicionário vazio se o arquivo não existir
 
 # Função para salvar o cache no arquivo JSON
-def save_translation_cache(json_cache):
+def save_translation_cache(new_cache_entry):
+    # Verificar se o arquivo JSON já existe
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'r') as file:
+            json_cache = json.load(file)  # Carregar o cache existente
+    else:
+        json_cache = {}
+
+    # Atualizar o cache com a nova entrada
+    json_cache.update(new_cache_entry)
+
+    # Salvar o cache atualizado de volta ao arquivo
     with open(CACHE_FILE, 'w') as file:
-        json.dump(json_cache, file)  # Salva o dicionário no arquivo JSON
+        json.dump(json_cache, file)
 
 # Inicializar o cache de traduções ao iniciar a aplicação Flask
 translation_cache = {}  # Cache em memória para traduções
@@ -44,16 +55,17 @@ def descapitalize_and_replace(text):
 
 # Função para traduzir texto usando o Google Translator
 def translate_text(card_name, text, text_type):
-    # Verifica primeiro o cache em memória
     cache_key = f"{card_name}_{text_type}"  # Cria chave única para o cache
+
+    # Verifica primeiro o cache em memória
     if cache_key in translation_cache:
-        print ("carta encontrada no cache")
-        return translation_cache[cache_key]['translated_text']  # Retorna a tradução do cache em memória
+        print("carta encontrada no cache")
+        return translation_cache[cache_key]['translated_text']
 
     # Em seguida, verifica o cache em JSON
     if cache_key in json_cache:
         print("carta encontrada no JSON")
-        return json_cache[cache_key]['translated_text']  # Retorna a tradução do cache em JSON
+        return json_cache[cache_key]['translated_text']
 
     # Se não encontrado, traduz do zero
     print("carta não encontrada")
@@ -65,15 +77,13 @@ def translate_text(card_name, text, text_type):
         'translated_text': translated
     }
 
-    # Salva no cache em JSON
-    json_cache[cache_key] = {
+    # Atualizar o cache JSON com a nova tradução e salvar
+    save_translation_cache({cache_key: {
         'original_text': text,
         'translated_text': translated
-    }
+    }})
 
-    save_translation_cache(json_cache)  # Salva o cache atualizado em JSON
-
-    return translated  # Retorna a tradução
+    return translated
 
 # Função para formatar texto para exibição em HTML
 def format_text_for_html(text):
