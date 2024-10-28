@@ -9,33 +9,42 @@ import json
 
 CACHE_FILE = "translation_cache.json"
 
+
 # Função para carregar o cache do arquivo JSON
 def load_translation_cache():
     if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'r') as file:
+        with open(CACHE_FILE, 'r', encoding='utf-8') as file:
             return json.load(file)
     return {}
 
+
 # Função para salvar o cache no arquivo JSON sem sobrescrever
 def save_translation_cache(new_cache_entry):
-    # Carrega o cache existente (se houver)
-    if os.path.exists(CACHE_FILE):
-        with open(CACHE_FILE, 'r') as file:
-            json_cache = json.load(file)
-    else:
-        json_cache = {}
+    try:
+        # Carrega o cache existente (se houver)
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, 'r', encoding='utf-8') as file:
+                json_cache = json.load(file)
+        else:
+            json_cache = {}
 
-    # Atualiza o cache com a nova entrada
-    json_cache.update(new_cache_entry)
+        # Atualiza o cache com a nova entrada
+        json_cache.update(new_cache_entry)
 
-    # Salva o cache atualizado
-    with open(CACHE_FILE, 'w') as file:
-        json.dump(json_cache, file)
+        # Salva o cache atualizado com indentação e caracteres especiais preservados
+        with open(CACHE_FILE, 'w', encoding='utf-8') as file:
+            json.dump(json_cache, file, ensure_ascii=False, indent=4)
+
+        print("Cache salvo com sucesso.")  # Mensagem de sucesso
+
+    except Exception as e:
+        print(f"Erro ao salvar cache: {e}")
 
 
 # Inicializar o cache de traduções
 translation_cache = {}  # Cache em memória
 json_cache = load_translation_cache()  # Cache em JSON
+
 
 def download_json(url):
     response = requests.get(url)
@@ -75,6 +84,7 @@ def filter_card_data(df):
     df = df[~df['num'].str.contains('z')]
     names_to_drop = ['Plains', 'Swamp', 'Island', 'Mountain', 'Forest']
     return df[~df['name'].isin(names_to_drop)]
+
 
 # Função para verificar e traduzir textos de cartas com cache
 def translate_and_format_text(card_name, text):
@@ -118,9 +128,6 @@ def translate_card_texts(df):
         card_name = row['name']
         oracle_text = row['oracle_text']
 
-        # Adicionando impressão de depuração
-        print(f"Translating card: {card_name}, oracle_text: {oracle_text}")  # Verifique o que está sendo passado
-
         translated_text = translate_and_format_text(card_name, oracle_text)
         translated_texts.append(translated_text)
     return translated_texts
@@ -128,6 +135,7 @@ def translate_card_texts(df):
 
 def save_csv_file(df, file_path):
     df.to_csv(file_path, index=False, encoding='utf-8')
+
 
 def create_html_table(rows):
     html_table = '<table class="styled-table">\n'
@@ -141,19 +149,24 @@ def create_html_table(rows):
     html_table += '</table>'
     return html_table
 
+
 def read_html_template(template_path):
     with open(template_path, "r", encoding="utf-8") as file:
         return file.read()
 
+
 def fill_html_template(template_content, set_code, html_table):
     return template_content.format(set_code=set_code, html_table=html_table)
+
 
 def save_html_file(html_content, file_path):
     with open(file_path, "w", encoding="utf-8") as html_file:
         html_file.write(html_content)
 
+
 def open_html_file(html_file_path):
     webbrowser.open(html_file_path)
+
 
 def func_traducao(set_code):
     try:
